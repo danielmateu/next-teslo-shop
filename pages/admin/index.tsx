@@ -12,7 +12,7 @@ import { FullScreenLoading } from '../../components/ui';
 export const DashboardPage = () => {
 
     const {data,error} = useSWR<DashboardSummaryResponse>('api/admin/dashboard', {
-        refreshInterval: 30 * 1000
+        refreshInterval: 30 * 1000 // 30 segundos
     });
 
     const [refreshIn, setRefreshIn] = useState(30);
