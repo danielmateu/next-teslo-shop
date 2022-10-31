@@ -14,13 +14,22 @@ interface Props {
 
 export const CartList: FC<Props> = ({ editable = false, products }) => {
 
+/* Destructuring the cart, updateCartQuantity and removeCartQuantity from the CartContext. */
     const { cart, updateCartQuantity, removeCartProduct } = useContext(CartContext);
 
+    /**
+     * The function takes a product and a new quantity value, and then updates the quantity of the
+     * product to the new quantity value.
+     * @param {ICartProduct} product - ICartProduct - this is the product that was updated
+     * @param {number} newQuantityValue - The new quantity value that the user has entered.
+     */
     const onNewCartQuantityValue = (product: ICartProduct, newQuantityValue: number) => {
         product.quantity = newQuantityValue;
         updateCartQuantity( product );
     }
 
+    /* A ternary operator. It is saying that if the products props is defined, then use that, otherwise
+    use the cart. */
     const productsToShow = products ? products : cart;
 
 

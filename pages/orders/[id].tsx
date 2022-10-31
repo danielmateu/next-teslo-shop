@@ -67,7 +67,7 @@ const OrderPage: NextPage<Props> = ({ order }) => {
 
     return (
         <ShopLayout title='Resumen del pedido' pageDescription={'Resumen de la orden'}>
-            <Typography variant='h1' component='h1'>Resumen del pedido</Typography>
+            <Typography variant='h1' component='h1'>Pedido: {order._id}</Typography>
 
             {
                 order.isPaid
@@ -148,7 +148,8 @@ const OrderPage: NextPage<Props> = ({ order }) => {
                                                     icon={<CreditScoreOutlined />}
                                                 />
 
-                                            ) : (
+                                            ) 
+                                            : (
                                                 <PayPalButtons
                                                     createOrder={(data, actions) => {
                                                         return actions.order.create({

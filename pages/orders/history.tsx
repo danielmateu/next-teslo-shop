@@ -88,8 +88,10 @@ const HistoryPage: NextPage<Props> = ({ orders }) => {
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 
+    /* Getting the session from the request. */
     const session: any = await getSession({ req });
 
+    /* If the user is not logged in, it redirects to the login page. */
     if (!session) {
         return {
             redirect: {
@@ -99,6 +101,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
         }
     }
 
+    /* Getting the orders from the database. */
     const orders = await dbOrders.getOrdersByUser(session.user._id);
 
 

@@ -105,7 +105,7 @@ const SummaryPage = () => {
                                     onClick={onCreateOrder}
                                     disabled={isPosting}
                                 >
-                                    Confirmar Orden
+                                    Confirmar Pedido
                                 </Button>
 
 

@@ -158,7 +158,7 @@ export const SideMenu = () => {
                                     <ListItemIcon>
                                         <ConfirmationNumberOutlined />
                                     </ListItemIcon>
-                                    <ListItemText primary={'Ordenes'} />
+                                    <ListItemText primary={'Pedidos'} />
                                 </ListItem>
 
                                 <ListItem button>
