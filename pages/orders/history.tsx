@@ -30,16 +30,16 @@ const columns: GridColDef[] = [
     },
     {
         field: 'orden',
-        headerName: 'Ver orden',
+        headerName: 'Ver pedido',
         width: 200,
         sortable: false,
         renderCell: (params: GridValueGetterParams) => {
             return (
-               <NextLink href={`/orders/${ params.row.orderId }`} passHref>
+                <NextLink href={`/orders/${params.row.orderId}`} passHref>
                     <Link underline='always'>
-                        Ver orden
+                        Ver pedido
                     </Link>
-               </NextLink>
+                </NextLink>
             )
         }
     }
@@ -54,32 +54,32 @@ const HistoryPage: NextPage<Props> = ({ orders }) => {
 
     // const rows = ..  
     // { id: indice + 1, paid: true, fullname: 'Fernando Herrera', orderId: 1283781237123 }
-    const rows = orders.map( (order, idx) => ({
+    const rows = orders.map((order, idx) => ({
         id: idx + 1,
         paid: order.isPaid,
-        fullname: `${ order.shippingAddress.firstName } ${ order.shippingAddress.lastName }`,
+        fullname: `${order.shippingAddress.firstName} ${order.shippingAddress.lastName}`,
         orderId: order._id
     }))
 
-  return (
-    <ShopLayout title={'Historial de ordenes'} pageDescription={'Historial de ordenes del cliente'}>
-        <Typography variant='h1' component='h1'>Historial de ordenes</Typography>
+    return (
+        <ShopLayout title={'Historial de ordenes'} pageDescription={'Historial de pedidos del cliente'}>
+            <Typography variant='h1' component='h1'>Historial de pedidos</Typography>
 
 
-        <Grid container className='fadeIn'>
-            <Grid item xs={12} sx={{ height:650, width: '100%' }}>
-                <DataGrid 
-                    rows={ rows }
-                    columns={ columns }
-                    pageSize={ 10 }
-                    rowsPerPageOptions={ [10] }
-                />
+            <Grid container className='fadeIn'>
+                <Grid item xs={12} sx={{ height: 650, width: '100%' }}>
+                    <DataGrid
+                        rows={rows}
+                        columns={columns}
+                        pageSize={10}
+                        rowsPerPageOptions={[10]}
+                    />
 
+                </Grid>
             </Grid>
-        </Grid>
 
-    </ShopLayout>
-  )
+        </ShopLayout>
+    )
 }
 
 
@@ -87,10 +87,10 @@ const HistoryPage: NextPage<Props> = ({ orders }) => {
 // - Only if you need to pre-render a page whose data must be fetched at request time
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-    
+
     const session: any = await getSession({ req });
 
-    if ( !session ) {
+    if (!session) {
         return {
             redirect: {
                 destination: '/auth/login?p=/orders/history',
@@ -99,7 +99,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
         }
     }
 
-    const orders = await dbOrders.getOrdersByUser( session.user._id );
+    const orders = await dbOrders.getOrdersByUser(session.user._id);
 
 
     return {
