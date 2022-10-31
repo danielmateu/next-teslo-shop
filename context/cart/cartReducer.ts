@@ -2,15 +2,15 @@ import { CartState } from './';
 import { ICartProduct, ShippingAddress } from '../../interfaces';
 
 
-type CartActionType = 
-   | { type: '[Cart] - LoadCart from cookies | storage', payload: ICartProduct[] } 
+type CartActionType =
+   | { type: '[Cart] - LoadCart from cookies | storage', payload: ICartProduct[] }
    | { type: '[Cart] - Update products in cart', payload: ICartProduct[] }
    | { type: '[Cart] - Change cart quantity', payload: ICartProduct }
    | { type: '[Cart] - Remove product in cart', payload: ICartProduct }
    | { type: '[Cart] - LoadAddress from Cookies', payload: ShippingAddress }
    | { type: '[Cart] - Update Address', payload: ShippingAddress }
-   | { 
-      type: '[Cart] - Update order summary', 
+   | {
+      type: '[Cart] - Update order summary',
       payload: {
          numberOfItems: number;
          subTotal: number;
@@ -20,7 +20,7 @@ type CartActionType =
    }
    | { type: '[Cart] - Order complete' }
 
-export const cartReducer = ( state: CartState, action: CartActionType ): CartState => {
+export const cartReducer = (state: CartState, action: CartActionType): CartState => {
 
    switch (action.type) {
       case '[Cart] - LoadCart from cookies | storage':
@@ -28,22 +28,22 @@ export const cartReducer = ( state: CartState, action: CartActionType ): CartSta
             ...state,
             isLoaded: true,
             cart: [...action.payload]
-          }
+         }
 
 
       case '[Cart] - Update products in cart':
          return {
             ...state,
-            cart: [ ...action.payload ]
+            cart: [...action.payload]
          }
 
 
       case '[Cart] - Change cart quantity':
          return {
             ...state,
-            cart: state.cart.map( product => {
-               if ( product._id !== action.payload._id ) return product;
-               if ( product.size !== action.payload.size ) return product;
+            cart: state.cart.map(product => {
+               if (product._id !== action.payload._id) return product;
+               if (product.size !== action.payload.size) return product;
                return action.payload;
             })
          }
@@ -52,7 +52,7 @@ export const cartReducer = ( state: CartState, action: CartActionType ): CartSta
       case '[Cart] - Remove product in cart':
          return {
             ...state,
-            cart: state.cart.filter( product => !(product._id === action.payload._id && product.size === action.payload.size ))
+            cart: state.cart.filter(product => !(product._id === action.payload._id && product.size === action.payload.size))
          }
 
       case '[Cart] - Update order summary':
@@ -80,8 +80,8 @@ export const cartReducer = ( state: CartState, action: CartActionType ): CartSta
             total: 0
          }
 
-       default:
-          return state;
+      default:
+         return state;
    }
 
 }
