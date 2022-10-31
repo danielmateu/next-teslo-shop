@@ -25,6 +25,7 @@ export type OrderResponseBody = {
 };
 
 
+/* Defining the type of the props that the component will receive. */
 interface Props {
     order: IOrder;
 }
@@ -66,14 +67,14 @@ const OrderPage: NextPage<Props> = ({ order }) => {
 
     return (
         <ShopLayout title='Resumen del pedido' pageDescription={'Resumen de la orden'}>
-            <Typography variant='h1' component='h1'>Pedido: {order._id}</Typography>
+            <Typography variant='h1' component='h1'>Resumen del pedido</Typography>
 
             {
                 order.isPaid
                     ? (
                         <Chip
                             sx={{ my: 2 }}
-                            label="Orden ya fue pagada"
+                            label="Pedido realizado"
                             variant='outlined'
                             color="success"
                             icon={<CreditScoreOutlined />}
@@ -141,7 +142,7 @@ const OrderPage: NextPage<Props> = ({ order }) => {
                                             ? (
                                                 <Chip
                                                     sx={{ my: 2 }}
-                                                    label="Orden ya fue pagada"
+                                                    label="Pedido realizado"
                                                     variant='outlined'
                                                     color="success"
                                                     icon={<CreditScoreOutlined />}
@@ -229,7 +230,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req, query }) => 
             }
         }
     }
-
 
     /* Returning the order object as a prop to the OrderPage component. */
     return {
