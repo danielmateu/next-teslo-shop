@@ -1,4 +1,4 @@
-import  { FC } from 'react'
+import { FC, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { GetServerSideProps } from 'next'
 
@@ -6,124 +6,155 @@ import { DriveFileRenameOutline, SaveOutlined, UploadOutlined } from '@mui/icons
 import { Box, Button, capitalize, Card, CardActions, CardMedia, Checkbox, Chip, Divider, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, ListItem, Paper, Radio, RadioGroup, TextField } from '@mui/material';
 
 import { AdminLayout } from '../../../components/layouts'
-import { IProduct, ISize, IType } from '../../../interfaces';
+import { IProduct } from '../../../interfaces';
 import { dbProducts } from '../../../database';
 
 
-const validTypes  = ['shirts','pants','hoodies','hats']
-const validGender = ['men','women','kid','unisex']
-const validSizes = ['XS','S','M','L','XL','XXL','XXXL']
+
+
+const validTypes = ['shirts', 'pants', 'hoodies', 'hats']
+const validGender = ['men', 'women', 'kid', 'unisex']
+const validSizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL']
 
 interface FormData {
-    _id?        : string;
-    description : string;
-    images      : string[];
-    inStock     : number;
-    price       : number;
-    sizes       : string[];
-    slug        : string;
-    tags        : string[];
-    title       : string;
-    type        : string;
-    gender      : string
+    _id?: string;
+    description: string;
+    images: string[];
+    inStock: number;
+    price: number;
+    sizes: string[];
+    slug: string;
+    tags: string[];
+    title: string;
+    type: string;
+    gender: string
 }
 
 interface Props {
     product: IProduct;
 }
 
-const ProductAdminPage:FC<Props> = ({ product }) => {
+const ProductAdminPage: FC<Props> = ({ product }) => {
 
-
-
-    const { register, handleSubmit, formState: { errors }} = useForm<FormData>({
+    const { register, handleSubmit, formState: { errors }, getValues, setValue, watch } = useForm<FormData>({
         defaultValues: product
     })
 
-    const onDeleteTag = ( tag: string ) => {
+
+    useEffect(() => {
+
+        const subscription = watch((value, { name, type }) => {
+            // console.log({ value, type, name });
+            if (name === 'title') {
+                const newSlug = value.title?.trim().replaceAll(' ', '_').replaceAll("'", "").toLocaleLowerCase() || '';
+
+                setValue('slug', newSlug)
+            }
+
+        })
+
+        return () => subscription.unsubscribe();
+    }, [watch, setValue])
+
+
+    const onChangeSize = (size: string) => {
+
+        /* Getting the values of the sizes object. */
+        const currentSizes = getValues('sizes');
+
+        /* Checking if the currentSizes array includes the size that was clicked. If it does, it will
+        filter out the size that was clicked. */
+        if (currentSizes.includes(size)) {
+            return setValue('sizes', currentSizes.filter(s => s !== size), { shouldValidate: true })
+        }
+
+        setValue('sizes', [...currentSizes, size], { shouldValidate: true });
+    }
+
+    const onDeleteTag = (tag: string) => {
 
     }
 
     const onSubmit = (form: FormData) => {
-        console.log({form});
+        console.log({ form });
     }
 
     return (
-        <AdminLayout 
-            title={'Producto'} 
-            subTitle={`Editando: ${ product.title }`}
-            icon={ <DriveFileRenameOutline /> }
+        <AdminLayout
+            title={'Producto'}
+            subTitle={`Editando: ${product.title}`}
+            icon={<DriveFileRenameOutline />}
         >
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Box display='flex' justifyContent='end' sx={{ mb: 1 }}>
-                    <Button 
+                    <Button
                         color="secondary"
                         variant='outlined'
-                        startIcon={ <SaveOutlined /> }
+                        startIcon={<SaveOutlined />}
                         sx={{ width: '150px' }}
                         type="submit"
-                        >
+                    >
                         Guardar
                     </Button>
                 </Box>
 
                 <Grid container spacing={2}>
                     {/* Data */}
-                    <Grid item xs={12} sm={ 6 }>
+                    <Grid item xs={12} sm={6}>
 
                         <TextField
                             label="Título"
                             variant='standard'
-                            fullWidth 
+                            fullWidth
                             sx={{ mb: 1 }}
-                            { ...register('title', {
+                            {...register('title', {
                                 required: 'Este campo es requerido',
                                 minLength: { value: 2, message: 'Mínimo 2 caracteres' }
                             })}
-                            error={ !!errors.title }
-                            helperText={ errors.title?.message }
+                            error={!!errors.title}
+                            helperText={errors.title?.message}
                         />
 
                         <TextField
                             label="Descripción"
                             variant='standard'
-                            fullWidth 
+                            fullWidth
                             multiline
-                            sx={{ mb: 1  }}
-                            { ...register('description', {
+                            sx={{ mb: 1 }}
+                            {...register('description', {
                                 required: 'Este campo es requerido',
-                                
+
                             })}
-                            error={ !!errors.description }
-                            helperText={ errors.description?.message }
+                            error={!!errors.description}
+                            helperText={errors.description?.message}
                         />
 
                         <TextField
                             label="Inventario"
                             type='number'
                             variant="standard"
-                            fullWidth 
+                            fullWidth
                             sx={{ mb: 1 }}
-                            { ...register('inStock', {
+                            {...register('inStock', {
                                 required: 'Este campo es requerido',
-                                min: {value:0, message: 'Mínimo 0 unidades'}
+                                min: { value: 0, message: 'Mínimo 0 unidades' }
                             })}
-                            error={ !!errors.inStock }
-                            helperText={ errors.inStock?.message }
+                            error={!!errors.inStock}
+                            helperText={errors.inStock?.message}
                         />
-                        
+
                         <TextField
                             label="Precio"
                             type='number'
                             variant="standard"
-                            fullWidth 
+                            fullWidth
                             sx={{ mb: 1 }}
-                            { ...register('price', {
+                            {...register('price', {
                                 required: 'Este campo es requerido',
-                                min: {value:0, message: 'Valor mínimo debe ser 0'}
+                                min: { value: 0, message: 'Valor mínimo debe ser 0' }
                             })}
-                            error={ !!errors.price }
-                            helperText={ errors.price?.message }
+                            error={!!errors.price}
+                            helperText={errors.price?.message}
                         />
 
                         <Divider sx={{ my: 1 }} />
@@ -132,16 +163,17 @@ const ProductAdminPage:FC<Props> = ({ product }) => {
                             <FormLabel>Tipo</FormLabel>
                             <RadioGroup
                                 row
-                                // value={ status }
-                                // onChange={ onStatusChanged }
+                                value={getValues('type')}
+                                onChange={({ target }) => setValue('type', target.value, { shouldValidate: true })}
+                            // value={ status }
                             >
                                 {
-                                    validTypes.map( option => (
-                                        <FormControlLabel 
-                                            key={ option }
-                                            value={ option }
-                                            control={ <Radio color='secondary' /> }
-                                            label={ capitalize(option) }
+                                    validTypes.map(option => (
+                                        <FormControlLabel
+                                            key={option}
+                                            value={option}
+                                            control={<Radio color='secondary' />}
+                                            label={capitalize(option)}
                                         />
                                     ))
                                 }
@@ -152,16 +184,18 @@ const ProductAdminPage:FC<Props> = ({ product }) => {
                             <FormLabel>Género</FormLabel>
                             <RadioGroup
                                 row
-                                // value={ status }
-                                // onChange={ onStatusChanged }
+                                value={getValues('gender')}
+                                onChange={({ target }) => setValue('gender', target.value, { shouldValidate: true })}
+                            // value={ status }
+                            // onChange={ onStatusChanged }
                             >
                                 {
-                                    validGender.map( option => (
-                                        <FormControlLabel 
-                                            key={ option }
-                                            value={ option }
-                                            control={ <Radio color='secondary' /> }
-                                            label={ capitalize(option) }
+                                    validGender.map(option => (
+                                        <FormControlLabel
+                                            key={option}
+                                            value={option}
+                                            control={<Radio color='secondary' />}
+                                            label={capitalize(option)}
                                         />
                                     ))
                                 }
@@ -172,7 +206,12 @@ const ProductAdminPage:FC<Props> = ({ product }) => {
                             <FormLabel>Tallas</FormLabel>
                             {
                                 validSizes.map(size => (
-                                    <FormControlLabel key={size} control={<Checkbox />} label={ size } />
+                                    <FormControlLabel
+                                        key={size}
+                                        control={<Checkbox checked={getValues('sizes').includes(size)} />}
+                                        label={size}
+                                        onChange={() => onChangeSize(size)}
+                                    />
                                 ))
                             }
                         </FormGroup>
@@ -180,28 +219,28 @@ const ProductAdminPage:FC<Props> = ({ product }) => {
                     </Grid>
 
                     {/* Tags e imagenes */}
-                    <Grid item xs={12} sm={ 6 }>
+                    <Grid item xs={12} sm={6}>
                         <TextField
                             label="Slug - URL"
                             variant="standard"
                             fullWidth
                             sx={{ mb: 1 }}
-                            { ...register('slug', {
+                            {...register('slug', {
                                 required: 'Este campo es requerido',
                                 validate: (val) => val.trim().includes(' ') ? 'No pueden haber espacios en blanco' : undefined
                             })}
-                            error={ !!errors.slug }
-                            helperText={ errors.slug?.message }
+                            error={!!errors.slug}
+                            helperText={errors.slug?.message}
                         />
 
                         <TextField
                             label="Etiquetas"
                             variant="standard"
-                            fullWidth 
+                            fullWidth
                             sx={{ mb: 1 }}
                             helperText="Presiona [spacebar] para agregar"
                         />
-                        
+
                         <Box sx={{
                             display: 'flex',
                             flexWrap: 'wrap',
@@ -209,38 +248,38 @@ const ProductAdminPage:FC<Props> = ({ product }) => {
                             p: 0,
                             m: 0,
                         }}
-                        component="ul">
+                            component="ul">
                             {
                                 product.tags.map((tag) => {
 
-                                return (
-                                    <Chip
-                                        key={tag}
-                                        label={tag}
-                                        onDelete={ () => onDeleteTag(tag)}
-                                        color="primary"
-                                        size='small'
-                                        sx={{ ml: 1, mt: 1}}
-                                    />
-                                );
-                            })}
+                                    return (
+                                        <Chip
+                                            key={tag}
+                                            label={tag}
+                                            onDelete={() => onDeleteTag(tag)}
+                                            color="primary"
+                                            size='small'
+                                            sx={{ ml: 1, mt: 1 }}
+                                        />
+                                    );
+                                })}
                         </Box>
 
-                        <Divider sx={{ my: 2  }}/>
-                        
+                        <Divider sx={{ my: 2 }} />
+
                         <Box display='flex' flexDirection="column">
-                            <FormLabel sx={{ mb:1}}>Imágenes</FormLabel>
+                            <FormLabel sx={{ mb: 1 }}>Imágenes</FormLabel>
                             <Button
                                 color="secondary"
                                 variant='outlined'
                                 fullWidth
-                                startIcon={ <UploadOutlined /> }
+                                startIcon={<UploadOutlined />}
                                 sx={{ mb: 3 }}
                             >
                                 Cargar imagen
                             </Button>
 
-                            <Chip 
+                            <Chip
                                 label="Es necesario al 2 imagenes"
                                 color='error'
                                 variant='outlined'
@@ -248,20 +287,20 @@ const ProductAdminPage:FC<Props> = ({ product }) => {
 
                             <Grid container spacing={2}>
                                 {
-                                    product.images.map( img => (
+                                    product.images.map(img => (
                                         <Grid item xs={4} sm={3} key={img}>
                                             <Card>
-                                                <CardMedia 
+                                                <CardMedia
                                                     component='img'
                                                     className='fadeIn'
-                                                    image={ `/products/${ img }` }
-                                                    alt={ img }
+                                                    image={`/products/${img}`}
+                                                    alt={img}
                                                 />
                                                 <CardActions>
-                                                    <Button 
-                                                    fullWidth 
-                                                    variant='outlined' 
-                                                    color="error"
+                                                    <Button
+                                                        fullWidth
+                                                        variant='outlined'
+                                                        color="error"
                                                     >
                                                         Borrar
                                                     </Button>
@@ -287,12 +326,12 @@ const ProductAdminPage:FC<Props> = ({ product }) => {
 
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-    
-    const { slug = ''} = query;
-    
+
+    const { slug = '' } = query;
+
     const product = await dbProducts.getProductBySlug(slug.toString());
 
-    if ( !product ) {
+    if (!product) {
         return {
             redirect: {
                 destination: '/admin/products',
@@ -300,7 +339,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
             }
         }
     }
-    
+
 
     return {
         props: {
