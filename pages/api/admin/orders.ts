@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { db } from '../../database'
-import { IOrder } from '../../interfaces'
-import { Order } from '../../models'
+import { db } from '../../../database'
+import { IOrder } from '../../../interfaces'
+import { Order } from '../../../models'
 
 type Data = 
 |{message: string}
@@ -11,7 +11,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Data>)
 
     switch (req.method) {
         case 'GET':
-            return getORders(req, res)
+            return getOrders(req, res)
             
     
         default:
@@ -21,7 +21,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Data>)
     
 }
 
-const getORders = async(req: NextApiRequest, res: NextApiResponse<Data>) => {
+const getOrders = async(req: NextApiRequest, res: NextApiResponse<Data>) => {
 
     await db.connect();
     const orders = await Order.find()
