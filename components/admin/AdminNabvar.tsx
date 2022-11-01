@@ -25,10 +25,10 @@ export const AdminNavbar = () => {
     return (
         <AppBar>
             <Toolbar>
-                <NextLink href='/' passHref>
+                <NextLink href='/admin' passHref>
                     <Link display='flex' alignItems='center'>
                         <Typography variant='h6'>Solid Camper |</Typography>
-                        <Typography sx={{ ml: 0.5 }}>Tienda</Typography>
+                        <Typography sx={{ ml: 0.5 }}>Admin</Typography>
                     </Link>  
                 </NextLink>
 

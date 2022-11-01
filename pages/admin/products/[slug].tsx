@@ -1,15 +1,32 @@
-import React, { FC } from 'react'
+import  { FC } from 'react'
+import { useForm } from 'react-hook-form';
 import { GetServerSideProps } from 'next'
-import { AdminLayout } from '../../../components/layouts'
-import { IProduct } from '../../../interfaces';
+
 import { DriveFileRenameOutline, SaveOutlined, UploadOutlined } from '@mui/icons-material';
-import { dbProducts } from '../../../database';
 import { Box, Button, capitalize, Card, CardActions, CardMedia, Checkbox, Chip, Divider, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, ListItem, Paper, Radio, RadioGroup, TextField } from '@mui/material';
+
+import { AdminLayout } from '../../../components/layouts'
+import { IProduct, ISize, IType } from '../../../interfaces';
+import { dbProducts } from '../../../database';
 
 
 const validTypes  = ['shirts','pants','hoodies','hats']
 const validGender = ['men','women','kid','unisex']
 const validSizes = ['XS','S','M','L','XL','XXL','XXXL']
+
+interface FormData {
+    _id?        : string;
+    description : string;
+    images      : string[];
+    inStock     : number;
+    price       : number;
+    sizes       : string[];
+    slug        : string;
+    tags        : string[];
+    title       : string;
+    type        : string;
+    gender      : string
+}
 
 interface Props {
     product: IProduct;
@@ -17,8 +34,18 @@ interface Props {
 
 const ProductAdminPage:FC<Props> = ({ product }) => {
 
+
+
+    const { register, handleSubmit, formState: { errors }} = useForm<FormData>({
+        defaultValues: product
+    })
+
     const onDeleteTag = ( tag: string ) => {
 
+    }
+
+    const onSubmit = (form: FormData) => {
+        console.log({form});
     }
 
     return (
@@ -27,10 +54,11 @@ const ProductAdminPage:FC<Props> = ({ product }) => {
             subTitle={`Editando: ${ product.title }`}
             icon={ <DriveFileRenameOutline /> }
         >
-            <form>
+            <form onSubmit={handleSubmit(onSubmit)}>
                 <Box display='flex' justifyContent='end' sx={{ mb: 1 }}>
                     <Button 
                         color="secondary"
+                        variant='outlined'
                         startIcon={ <SaveOutlined /> }
                         sx={{ width: '150px' }}
                         type="submit"
@@ -45,29 +73,35 @@ const ProductAdminPage:FC<Props> = ({ product }) => {
 
                         <TextField
                             label="Título"
-                            variant="filled"
+                            variant='standard'
                             fullWidth 
                             sx={{ mb: 1 }}
-                            // { ...register('name', {
-                            //     required: 'Este campo es requerido',
-                            //     minLength: { value: 2, message: 'Mínimo 2 caracteres' }
-                            // })}
-                            // error={ !!errors.name }
-                            // helperText={ errors.name?.message }
+                            { ...register('title', {
+                                required: 'Este campo es requerido',
+                                minLength: { value: 2, message: 'Mínimo 2 caracteres' }
+                            })}
+                            error={ !!errors.title }
+                            helperText={ errors.title?.message }
                         />
 
                         <TextField
                             label="Descripción"
-                            variant="filled"
+                            variant='standard'
                             fullWidth 
                             multiline
-                            sx={{ mb: 1 }}
+                            sx={{ mb: 1  }}
+                            { ...register('description', {
+                                required: 'Este campo es requerido',
+                                
+                            })}
+                            error={ !!errors.description }
+                            helperText={ errors.description?.message }
                         />
 
                         <TextField
                             label="Inventario"
                             type='number'
-                            variant="filled"
+                            variant="standard"
                             fullWidth 
                             sx={{ mb: 1 }}
                         />
@@ -75,7 +109,7 @@ const ProductAdminPage:FC<Props> = ({ product }) => {
                         <TextField
                             label="Precio"
                             type='number'
-                            variant="filled"
+                            variant="standard"
                             fullWidth 
                             sx={{ mb: 1 }}
                         />
@@ -137,14 +171,14 @@ const ProductAdminPage:FC<Props> = ({ product }) => {
                     <Grid item xs={12} sm={ 6 }>
                         <TextField
                             label="Slug - URL"
-                            variant="filled"
+                            variant="standard"
                             fullWidth
                             sx={{ mb: 1 }}
                         />
 
                         <TextField
                             label="Etiquetas"
-                            variant="filled"
+                            variant="standard"
                             fullWidth 
                             sx={{ mb: 1 }}
                             helperText="Presiona [spacebar] para agregar"
@@ -180,6 +214,7 @@ const ProductAdminPage:FC<Props> = ({ product }) => {
                             <FormLabel sx={{ mb:1}}>Imágenes</FormLabel>
                             <Button
                                 color="secondary"
+                                variant='outlined'
                                 fullWidth
                                 startIcon={ <UploadOutlined /> }
                                 sx={{ mb: 3 }}
