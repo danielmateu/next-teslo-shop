@@ -84,7 +84,7 @@ export const SideMenu = () => {
 
                     <ListItem
                         button
-                        sx={{ display: { xs: '', sm: 'none' } }}
+                        sx={{ display: {  xs: 'flex', md: 'none' } }}
                         onClick={() => navigateTo('/category/men')}
                     >
                         <ListItemIcon>
@@ -95,7 +95,7 @@ export const SideMenu = () => {
 
                     <ListItem
                         button
-                        sx={{ display: { xs: '', sm: 'none' } }}
+                        sx={{ display: {  xs: 'flex', md: 'none' } }}
                         onClick={() => navigateTo('/category/women')}
                     >
                         <ListItemIcon>
@@ -106,7 +106,7 @@ export const SideMenu = () => {
 
                     <ListItem
                         button
-                        sx={{ display: { xs: '', sm: 'none' } }}
+                        sx={{ display: {  xs: 'flex', md: 'none' } }}
                         onClick={() => navigateTo('/category/kid')}
                     >
                         <ListItemIcon>
