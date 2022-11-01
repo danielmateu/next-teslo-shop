@@ -1,9 +1,12 @@
 import React from 'react'
-import { AdminLayout } from '../../components/layouts/AdminLayout';
-import { CategoryOutlined } from '@mui/icons-material';
-import { Grid, Chip, CardMedia } from '@mui/material';
-import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
+
 import useSWR from 'swr';
+
+import { CategoryOutlined } from '@mui/icons-material';
+import { Grid, CardMedia } from '@mui/material';
+
+import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
+import { AdminLayout } from '../../components/layouts/AdminLayout';
 import { IProduct } from '../../interfaces';
 
 

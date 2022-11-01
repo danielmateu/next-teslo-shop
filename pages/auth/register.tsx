@@ -53,7 +53,7 @@ const RegisterPage = () => {
 
     return (
         <AuthLayout title={'Ingresar'}>
-            <form onSubmit={ handleSubmit(onRegisterForm) } noValidate>
+            <form onSubmit={ handleSubmit(onRegisterForm) } className="fadeIn" noValidate>
                 <Box sx={{ width: 350, padding:'10px 20px' }}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>

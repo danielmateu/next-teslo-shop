@@ -13,7 +13,7 @@ import { useRouter } from 'next/router';
 
 
 type FormData = {
-    email   : string,
+    email: string,
     password: string,
 };
 
@@ -24,20 +24,20 @@ const LoginPage = () => {
     // const { loginUser } = useContext( AuthContext );
 
     const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
-    const [ showError, setShowError ] = useState(false);
-    
+    const [showError, setShowError] = useState(false);
+
     const [providers, setProviders] = useState<any>({});
 
     useEffect(() => {
-      getProviders().then( prov => {
-        // console.log({prov});
-        setProviders(prov)
-      })
+        getProviders().then(prov => {
+            // console.log({prov});
+            setProviders(prov)
+        })
     }, [])
-    
 
 
-    const onLoginUser = async( { email, password }: FormData ) => {
+
+    const onLoginUser = async ({ email, password }: FormData) => {
 
         setShowError(false);
 
@@ -50,24 +50,24 @@ const LoginPage = () => {
         // // Todo: navegar a la pantalla que el usuario estaba
         // const destination = router.query.p?.toString() || '/';
         // router.replace(destination);
-        await signIn('credentials',{ email, password });
+        await signIn('credentials', { email, password });
 
     }
 
 
     return (
-        <AuthLayout title={'Ingresar'}>
-            <form onSubmit={ handleSubmit(onLoginUser) } noValidate>
-                <Box sx={{ width: 350, padding:'10px 20px' }}>
+        <AuthLayout title={'Ingresar'} >
+            <form onSubmit={handleSubmit(onLoginUser)} className="fadeIn" noValidate>
+                <Box sx={{ width: 350, padding: '10px 20px' }}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <Typography variant='h1' component="h1">Iniciar Sesión</Typography>
-                            <Chip 
+                            <Chip
                                 label="No reconocemos ese usuario / contraseña"
                                 color="error"
-                                icon={ <ErrorOutline /> }
+                                icon={<ErrorOutline />}
                                 className="fadeIn"
-                                sx={{ display: showError ? 'flex': 'none' }}
+                                sx={{ display: showError ? 'flex' : 'none' }}
                             />
                         </Grid>
 
@@ -76,14 +76,14 @@ const LoginPage = () => {
                                 type="email"
                                 label="Correo"
                                 variant="filled"
-                                fullWidth 
-                                { ...register('email', {
+                                fullWidth
+                                {...register('email', {
                                     required: 'Este campo es requerido',
                                     validate: validations.isEmail
-                                    
+
                                 })}
-                                error={ !!errors.email }
-                                helperText={ errors.email?.message }
+                                error={!!errors.email}
+                                helperText={errors.email?.message}
                             />
 
                         </Grid>
@@ -92,13 +92,13 @@ const LoginPage = () => {
                                 label="Contraseña"
                                 type='password'
                                 variant="filled"
-                                fullWidth 
-                                { ...register('password', {
+                                fullWidth
+                                {...register('password', {
                                     required: 'Este campo es requerido',
                                     minLength: { value: 6, message: 'Mínimo 6 caracteres' }
                                 })}
-                                error={ !!errors.password }
-                                helperText={ errors.password?.message }
+                                error={!!errors.password}
+                                helperText={errors.password?.message}
                             />
                         </Grid>
 
@@ -114,8 +114,8 @@ const LoginPage = () => {
                         </Grid>
 
                         <Grid item xs={12} display='flex' justifyContent='end'>
-                            <NextLink 
-                                href={ router.query.p ? `/auth/register?p=${ router.query.p }`: '/auth/register' } 
+                            <NextLink
+                                href={router.query.p ? `/auth/register?p=${router.query.p}` : '/auth/register'}
                                 passHref>
                                 <Link underline='always'>
                                     ¿No tienes cuenta?
@@ -123,24 +123,24 @@ const LoginPage = () => {
                             </NextLink>
                         </Grid>
 
-                            
+
                         <Grid item xs={12} display='flex' flexDirection='column' justifyContent='end'>
                             <Divider sx={{ width: '100%', mb: 2 }} />
                             {
-                                Object.values( providers ).map(( provider: any ) => {
-                                    
-                                    if ( provider.id === 'credentials' ) return (<div key="credentials"></div>);
+                                Object.values(providers).map((provider: any) => {
+
+                                    if (provider.id === 'credentials') return (<div key="credentials"></div>);
 
                                     return (
                                         <Button
-                                            key={ provider.id }
+                                            key={provider.id}
                                             variant="outlined"
                                             fullWidth
                                             color="primary"
                                             sx={{ mb: 1 }}
-                                            onClick={ () => signIn( provider.id ) }
+                                            onClick={() => signIn(provider.id)}
                                         >
-                                            { provider.name }
+                                            {provider.name}
                                         </Button>
                                     )
 
@@ -153,7 +153,7 @@ const LoginPage = () => {
                 </Box>
             </form>
         </AuthLayout>
-  )
+    )
 }
 
 
@@ -163,13 +163,13 @@ const LoginPage = () => {
 
 
 export const getServerSideProps: GetServerSideProps = async ({ req, query }) => {
-    
+
     const session = await getSession({ req });
     // console.log({session});
 
     const { p = '/' } = query;
 
-    if ( session ) {
+    if (session) {
         return {
             redirect: {
                 destination: p.toString(),
@@ -180,7 +180,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, query }) => 
 
 
     return {
-        props: { }
+        props: {}
     }
 }
 
