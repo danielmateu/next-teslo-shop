@@ -84,7 +84,7 @@ export const SideMenu = () => {
 
                     <ListItem
                         button
-                        sx={{ display: {  xs: 'flex', md: 'none' } }}
+                        sx={{ display: { xs: 'flex', md: 'none' } }}
                         onClick={() => navigateTo('/category/men')}
                     >
                         <ListItemIcon>
@@ -95,7 +95,7 @@ export const SideMenu = () => {
 
                     <ListItem
                         button
-                        sx={{ display: {  xs: 'flex', md: 'none' } }}
+                        sx={{ display: { xs: 'flex', md: 'none' } }}
                         onClick={() => navigateTo('/category/women')}
                     >
                         <ListItemIcon>
@@ -106,13 +106,23 @@ export const SideMenu = () => {
 
                     <ListItem
                         button
-                        sx={{ display: {  xs: 'flex', md: 'none' } }}
+                        sx={{ display: { xs: 'flex', md: 'none' } }}
                         onClick={() => navigateTo('/category/kid')}
                     >
                         <ListItemIcon>
                             <EscalatorWarningOutlined />
                         </ListItemIcon>
                         <ListItemText primary={'Niños'} />
+                    </ListItem>
+
+                    <ListItem
+                        button
+                        onClick={() => navigateTo(`/`)}
+                    >
+                        <ListItemIcon>
+                            <HouseOutlined />
+                        </ListItemIcon>
+                        <ListItemText primary={'Inicio'} />
                     </ListItem>
 
 
@@ -148,17 +158,17 @@ export const SideMenu = () => {
                                 <Divider />
                                 <ListSubheader>Admin Panel</ListSubheader>
 
-                                <ListItem 
+                                <ListItem
                                     button
                                     onClick={() => navigateTo(`/admin/`)}
-                                    >
+                                >
                                     <ListItemIcon>
-                                        <DashboardOutlined/>
+                                        <DashboardOutlined />
                                     </ListItemIcon>
                                     <ListItemText primary={'Dashboard'} />
                                 </ListItem>
 
-                                <ListItem 
+                                <ListItem
                                     button
                                     onClick={() => navigateTo(`/admin/products`)}
                                 >
@@ -168,7 +178,7 @@ export const SideMenu = () => {
                                     <ListItemText primary={'Productos'} />
                                 </ListItem>
 
-                                <ListItem 
+                                <ListItem
                                     button
                                     onClick={() => navigateTo(`/admin/orders`)}
                                 >
@@ -178,7 +188,7 @@ export const SideMenu = () => {
                                     <ListItemText primary={'Pedidos'} />
                                 </ListItem>
 
-                                <ListItem 
+                                <ListItem
                                     button
                                     onClick={() => navigateTo(`/admin/users`)}
                                 >
@@ -188,7 +198,7 @@ export const SideMenu = () => {
                                     <ListItemText primary={'Usuarios'} />
                                 </ListItem>
 
-                                <ListItem 
+                                <ListItem
                                     button
                                     onClick={() => navigateTo(`/`)}
                                 >
