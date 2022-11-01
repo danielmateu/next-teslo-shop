@@ -35,7 +35,7 @@ export const Navbar = () => {
 
                 <Box flex={ 1 } />
 
-                <Box sx={{ display: isSearchVisible ? 'none' : { xs: 'none', sm: 'block' } }}
+                <Box sx={{ display: isSearchVisible ? 'none' : { xs: 'none', md: 'block' } }}
                     className="fadeIn">
                     <NextLink href='/category/men' passHref>
                         <Link>
