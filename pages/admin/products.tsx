@@ -1,9 +1,10 @@
 import React from 'react'
+import NextLink from 'next/link';
 
 import useSWR from 'swr';
 
 import { CategoryOutlined } from '@mui/icons-material';
-import { Grid, CardMedia } from '@mui/material';
+import { Grid, CardMedia, Link } from '@mui/material';
 
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import { AdminLayout } from '../../components/layouts/AdminLayout';
@@ -11,10 +12,10 @@ import { IProduct } from '../../interfaces';
 
 
 const columns: GridColDef[] = [
-    { 
-        field: 'img', 
+    {
+        field: 'img',
         headerName: 'Foto',
-        renderCell: ({row}: GridValueGetterParams) => {
+        renderCell: ({ row }: GridValueGetterParams) => {
             return (
                 <a href={`/product/${row.slug}`} target="_blank" rel="noreferrer">
                     <CardMedia
@@ -24,18 +25,31 @@ const columns: GridColDef[] = [
                         image={`/products/${row.img}`}
                     />
 
-                    
+
                 </a>
             )
         }
     },
-    { field: 'title', headerName: 'Title', width: 250 },
-    { field: 'gender', headerName: 'Género'},
-    { field: 'type', headerName: 'Tipo'},
-    { field: 'inStock', headerName: 'Inventario'},
-    { field: 'price', headerName: 'Precio'},
-    { field: 'sizes', headerName: 'Tallas', width: 250},
-    
+    {
+        field: 'title',
+        headerName: 'Title',
+        width: 250,
+        renderCell: ({ row }: GridValueGetterParams) => {
+            return (
+                <NextLink href={`/admin/products/${row.slug}`} passHref>
+                    <Link underline='always'>
+                        {row.title}
+                    </Link>
+                </NextLink>
+            )
+        }
+    },
+    { field: 'gender', headerName: 'Género' },
+    { field: 'type', headerName: 'Tipo' },
+    { field: 'inStock', headerName: 'Inventario' },
+    { field: 'price', headerName: 'Precio' },
+    { field: 'sizes', headerName: 'Tallas', width: 250 },
+
 ];
 
 
