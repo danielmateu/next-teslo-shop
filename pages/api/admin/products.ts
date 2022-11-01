@@ -24,7 +24,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Data>)
 
         case 'POST':
 
-            return;
+            return createProduct(req,res);;
 
         default: 
 
@@ -84,5 +84,38 @@ const updatedProduct = async(req: NextApiRequest, res: NextApiResponse<Data>) =>
         
     }
 
+}
+
+const createProduct = async(req: NextApiRequest, res: NextApiResponse<Data>) => {
+
+    const {images = []} = req.body as IProduct;
+    
+    if(images.length < 2){
+        return res.status(400).json({ message: 'Se necesitan al menos dos imágenes'});
+    }
+
+    //TODO: Posiblemente tendremos un localhost:3000/products/asasas.jpg
+
+    try {
+
+        await db.connect(); 
+
+        const productInDb = await Product.findOne({slug:req.body.slug});
+
+        if(productInDb){
+            await db.disconnect(); 
+            return res.status(400).json({message: 'Ya existe un producto con ese Slug'})
+        }
+
+        const product = new Product(req.body);
+        await product.save();
+        await db.disconnect(); 
+
+        res.status(201).json(product);
+
+    } catch (error) {
+        await db.disconnect();
+        return res.status(400).json({message:'Revisar logs del servidor'})
+    }
 }
 
