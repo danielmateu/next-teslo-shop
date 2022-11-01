@@ -104,6 +104,12 @@ const ProductAdminPage:FC<Props> = ({ product }) => {
                             variant="standard"
                             fullWidth 
                             sx={{ mb: 1 }}
+                            { ...register('inStock', {
+                                required: 'Este campo es requerido',
+                                min: {value:0, message: 'Mínimo 0 unidades'}
+                            })}
+                            error={ !!errors.inStock }
+                            helperText={ errors.inStock?.message }
                         />
                         
                         <TextField
@@ -112,6 +118,12 @@ const ProductAdminPage:FC<Props> = ({ product }) => {
                             variant="standard"
                             fullWidth 
                             sx={{ mb: 1 }}
+                            { ...register('price', {
+                                required: 'Este campo es requerido',
+                                min: {value:0, message: 'Valor mínimo debe ser 0'}
+                            })}
+                            error={ !!errors.price }
+                            helperText={ errors.price?.message }
                         />
 
                         <Divider sx={{ my: 1 }} />
@@ -174,6 +186,12 @@ const ProductAdminPage:FC<Props> = ({ product }) => {
                             variant="standard"
                             fullWidth
                             sx={{ mb: 1 }}
+                            { ...register('slug', {
+                                required: 'Este campo es requerido',
+                                validate: (val) => val.trim().includes(' ') ? 'No pueden haber espacios en blanco' : undefined
+                            })}
+                            error={ !!errors.slug }
+                            helperText={ errors.slug?.message }
                         />
 
                         <TextField
@@ -240,7 +258,11 @@ const ProductAdminPage:FC<Props> = ({ product }) => {
                                                     alt={ img }
                                                 />
                                                 <CardActions>
-                                                    <Button fullWidth color="error">
+                                                    <Button 
+                                                    fullWidth 
+                                                    variant='outlined' 
+                                                    color="error"
+                                                    >
                                                         Borrar
                                                     </Button>
                                                 </CardActions>
