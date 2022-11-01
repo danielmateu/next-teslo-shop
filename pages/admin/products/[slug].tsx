@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { GetServerSideProps } from 'next'
 
@@ -8,8 +8,6 @@ import { Box, Button, capitalize, Card, CardActions, CardMedia, Checkbox, Chip, 
 import { AdminLayout } from '../../../components/layouts'
 import { IProduct } from '../../../interfaces';
 import { dbProducts } from '../../../database';
-
-
 
 
 const validTypes = ['shirts', 'pants', 'hoodies', 'hats']
@@ -35,6 +33,8 @@ interface Props {
 }
 
 const ProductAdminPage: FC<Props> = ({ product }) => {
+
+    const [newTagValue, setNewTagValue] = useState('');
 
     const { register, handleSubmit, formState: { errors }, getValues, setValue, watch } = useForm<FormData>({
         defaultValues: product
@@ -71,8 +71,28 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
         setValue('sizes', [...currentSizes, size], { shouldValidate: true });
     }
 
-    const onDeleteTag = (tag: string) => {
+    const onNewTag = () => {
 
+        /* Trimming the value of the newTagValue variable and converting it to lowercase. */
+        const newTag = newTagValue.trim().toLocaleLowerCase();
+        setNewTagValue('');
+        /* Getting the values of the tags from the form. */
+        const currentTags = getValues('tags');
+
+        /* Checking if the newTag is already in the currentTags array. If it is, it will return. */
+        if(currentTags.includes(newTag)) {
+            return;
+        }
+
+        /* Adding a new tag to the currentTags array. */
+        currentTags.push(newTag);
+        
+    }
+
+    const onDeleteTag = (tag: string) => {
+        /* Filtering out the tag that was clicked on. */
+        const updatedTags = getValues('tags').filter(t => t !== tag);
+        setValue('tags', updatedTags, {shouldValidate: true });
     }
 
     const onSubmit = (form: FormData) => {
@@ -239,6 +259,9 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                             fullWidth
                             sx={{ mb: 1 }}
                             helperText="Presiona [spacebar] para agregar"
+                            value={newTagValue}
+                            onChange = {({target}) => setNewTagValue(target.value)}
+                            onKeyUp={({code}) => code === 'Space' ? onNewTag(): undefined}
                         />
 
                         <Box sx={{
@@ -250,7 +273,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                         }}
                             component="ul">
                             {
-                                product.tags.map((tag) => {
+                                getValues('tags').map((tag) => {
 
                                     return (
                                         <Chip
