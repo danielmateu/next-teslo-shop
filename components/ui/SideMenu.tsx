@@ -115,15 +115,21 @@ export const SideMenu = () => {
                         <ListItemText primary={'Niños'} />
                     </ListItem>
 
-                    <ListItem
-                        button
-                        onClick={() => navigateTo(`/`)}
-                    >
-                        <ListItemIcon>
-                            <HouseOutlined />
-                        </ListItemIcon>
-                        <ListItemText primary={'Inicio'} />
-                    </ListItem>
+                    {
+                        user?.role === 'client' && (
+
+                            <ListItem
+                                button
+                                onClick={() => navigateTo(`/`)}
+                            >
+                                <ListItemIcon>
+                                    <HouseOutlined />
+                                </ListItemIcon>
+                                <ListItemText primary={'Inicio'} />
+                            </ListItem>
+                        )
+                    }
+
 
 
                     {
